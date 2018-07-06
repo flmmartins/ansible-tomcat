@@ -1,0 +1,7 @@
+- hosts: webservers
+  tasks:
+    - include_role:
+        name: tomcat
+      vars:
+          user: centos
+          port: 8080
