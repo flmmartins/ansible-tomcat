@@ -1,7 +1,16 @@
 - hosts: webservers
-  tasks:
-    - include_role:
-        name: tomcat
-      vars:
-          user: centos
-          port: 8080
+  vars:
+    tomcat_dir: /opt/tomcat
+    app_port: 8080
+
+  roles:
+  - role: java
+  - role: nginx
+  - role: tomcat
+    vars:
+      install_dir: "{{ tomcat_dir }}"
+      java: "{{ hostvars[inventory_hostname]['JAVA_HOME'] }}"
+  - role: app
+    vars:
+      install_dir: "{{ tomcat_dir }}/webapps"
+

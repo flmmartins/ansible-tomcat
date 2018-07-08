@@ -1,0 +1,9 @@
+---
+- name: Download app
+  get_url:
+    url: "{{ src }}"
+    dest: "{{ install_dir }}"
+    owner: tomcat
+    group: tomcat
+
+  become: yes

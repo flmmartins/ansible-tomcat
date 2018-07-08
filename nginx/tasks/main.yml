@@ -1,0 +1,14 @@
+---
+- name: Install nginx
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+  become: yes
+
+- name: Start nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  become: yes

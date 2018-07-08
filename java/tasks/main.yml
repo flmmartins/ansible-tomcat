@@ -1,0 +1,28 @@
+---
+- name: Install java
+  yum:
+    name: java-{{ java_version }}-openjdk
+    state: present
+  become: yes
+
+- name: Fetch installed package
+  shell: "yum list installed | grep java-{{ java_version }}-openjdk | head -1 | awk '{print $2}'"
+  register: package
+
+- name: Erase any reference to JAVA_HOME before updating
+  lineinfile:
+    path: /etc/profile
+    state: absent
+    regexp: '^JAVA_HOME='
+  become: yes
+
+- name: Add new JAVA_HOME
+  lineinfile:
+    path: /etc/profile
+    state: present
+    line: 'JAVA_HOME=/usr/lib/jvm/{{ package.stdout }}/jre'
+  become: yes
+
+- name: Set fact
+  set_fact:
+    JAVA_HOME: '/usr/lib/jvm/{{ package.stdout }}/jre'

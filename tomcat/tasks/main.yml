@@ -1,4 +1,77 @@
 ---
-- import_tasks: java.yml
-#- import_tasks: apache.yml
-#- import_tasks: tomcat.yml
+- name: Create group tomcat
+  group:
+    name: tomcat
+    state: present
+  become: yes
+
+- debug: msg="dir is {{ install_dir }}"
+# TODO: set install_ dir based on extracted files
+
+- name: Create user tomcat
+  user:
+    name: tomcat
+    state: present
+    group: tomcat
+    shell: /bin/false
+    home: "{{ install_dir }}"
+  become: yes
+
+- name: Download tomcat and untar
+  unarchive:
+    src: "{{ src }}"
+    dest: "{{ install_dir }}"
+    creates: "{{ install_dir }}"
+    remote_src: yes
+  become: yes
+
+- name: Set tomcat group permission to config dir
+  file:
+    path: "{{ install_dir }}"
+    state: directory
+    group: tomcat
+    recurse: yes
+  become: yes
+
+- name: Set tomcat group permissions to conf
+  file:
+    path: "{{ install_dir }}/conf"
+    state: directory
+    group: tomcat
+    mode: 0640
+    recurse: yes
+  become: yes
+
+- file:
+    path: "{{ install_dir }}/conf"
+    state: directory
+    group: tomcat
+    mode: 0650
+  become: yes
+
+- name: Set tomcat user permissions
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: tomcat
+    recurse: yes
+  loop:
+    - "{{ install_dir }}/webapps"
+    - "{{ install_dir }}/work"
+    - "{{ install_dir }}/temp"
+    - "{{ install_dir }}/logs"
+  become: yes
+
+- name: Create tomcat service
+  template:
+    src: tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+  become: yes
+
+- name: Run tomcat
+  systemd:
+    name: tomcat
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  become: yes
