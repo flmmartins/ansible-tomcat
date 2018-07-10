@@ -6,6 +6,12 @@
   loop: "{{ packages }}"
   become: yes
 
+- name:
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  become: yes
+
 - name: Start nginx
   service:
     name: nginx

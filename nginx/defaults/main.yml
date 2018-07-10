@@ -2,3 +2,4 @@
 packages:
   - epel-release
   - nginx
+port: 80
