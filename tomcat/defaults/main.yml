@@ -1,3 +1,5 @@
 ---
 src: "https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz"
 install_dir: "/opt/tomcat/"
+pkg_name: "{{ (src | basename).split('.tar')[0] }}"
+tomcat_folder: "{{install_dir }}/{{pkg_name}}"

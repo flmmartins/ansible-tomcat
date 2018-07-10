@@ -1,12 +1,18 @@
 ---
+- name: Download tomcat and untar
+  unarchive:
+    src: "{{ src }}"
+    dest: "{{ install_dir }}"
+    creates: "{{ tomcat_folder }}"
+    remote_src: yes
+  become: yes
+
 - name: Create group tomcat
   group:
     name: tomcat
     state: present
   become: yes
 
-- debug: msg="dir is {{ install_dir }}"
-# TODO: set install_ dir based on extracted files
 
 - name: Create user tomcat
   user:
@@ -17,17 +23,9 @@
     home: "{{ install_dir }}"
   become: yes
 
-- name: Download tomcat and untar
-  unarchive:
-    src: "{{ src }}"
-    dest: "{{ install_dir }}"
-    creates: "{{ install_dir }}"
-    remote_src: yes
-  become: yes
-
 - name: Set tomcat group permission to config dir
   file:
-    path: "{{ install_dir }}"
+    path: "{{ tomcat_folder }}"
     state: directory
     group: tomcat
     recurse: yes
@@ -35,7 +33,7 @@
 
 - name: Set tomcat group permissions to conf
   file:
-    path: "{{ install_dir }}/conf"
+    path: "{{ tomcat_folder }}/conf"
     state: directory
     group: tomcat
     mode: 0640
@@ -43,7 +41,7 @@
   become: yes
 
 - file:
-    path: "{{ install_dir }}/conf"
+    path: "{{ tomcat_folder }}/conf"
     state: directory
     group: tomcat
     mode: 0650
@@ -56,10 +54,10 @@
     owner: tomcat
     recurse: yes
   loop:
-    - "{{ install_dir }}/webapps"
-    - "{{ install_dir }}/work"
-    - "{{ install_dir }}/temp"
-    - "{{ install_dir }}/logs"
+    - "{{ tomcat_folder }}/webapps"
+    - "{{ tomcat_folder }}/work"
+    - "{{ tomcat_folder }}/temp"
+    - "{{ tomcat_folder }}/logs"
   become: yes
 
 - name: Create tomcat service
