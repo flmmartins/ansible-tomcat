@@ -5,15 +5,15 @@ After=network.target
 [Service]
 Type=forking
 
-Environment=JAVA_HOME={{ java }}
-Environment=CATALINA_PID={{ tomcat_folder }}/temp/tomcat.pid
-Environment=CATALINA_HOME={{ tomcat_folder }}
-Environment=CATALINA_BASE={{ tomcat_folder }}
+Environment=JAVA_HOME={{ JAVA_HOME }}
+Environment=CATALINA_PID={{ config }}/temp/tomcat.pid
+Environment=CATALINA_HOME={{ config }}
+Environment=CATALINA_BASE={{ config }}
 Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
-ExecStart={{ tomcat_folder }}/bin/startup.sh
-ExecStop={{ tomcat_folder }}/bin/shutdown.sh
+ExecStart={{ config }}/bin/startup.sh
+ExecStop={{ config }}/bin/shutdown.sh
 
 User=tomcat
 Group=tomcat

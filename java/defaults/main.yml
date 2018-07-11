@@ -1,2 +1,4 @@
 ---
 java_version: 1.8.0
+java_pkg: "java-{{ java_version }}-openjdk"
+java_path: /usr/lib/jvm/

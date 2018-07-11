@@ -1,13 +1,17 @@
 ---
 - name: Install java
   yum:
-    name: java-{{ java_version }}-openjdk
+    name: "{{ java_pkg }}"
     state: present
   become: yes
 
 - name: Fetch installed package
-  shell: "yum list installed | grep java-{{ java_version }}-openjdk | head -1 | awk '{print $2}'"
-  register: package
+  shell: " ls {{ java_path }} | grep {{ java_pkg }}*"
+  register: found_files
+
+- name: Get latest java
+  set_fact:
+    JAVA_FOLDER: "{{ found_files.stdout_lines | sort(attribute='mtime',reverse=true) | first }}"
 
 - name: Erase any reference to JAVA_HOME before updating
   lineinfile:
@@ -20,9 +24,9 @@
   lineinfile:
     path: /etc/profile
     state: present
-    line: 'JAVA_HOME=/usr/lib/jvm/{{ package.stdout }}/jre'
+    line: 'JAVA_HOME={{ java_path }}-{{ JAVA_FOLDER }}/jre'
   become: yes
 
 - name: Set fact
   set_fact:
-    JAVA_HOME: '/usr/lib/jvm/{{ package.stdout }}/jre'
+    JAVA_HOME: '{{ java_path}}-{{ JAVA_FOLDER }}/jre'

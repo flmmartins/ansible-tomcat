@@ -3,7 +3,6 @@
   get_url:
     url: "{{ src }}"
     dest: "{{ install_dir }}"
-    owner: tomcat
-    group: tomcat
-
+    owner: "{{ app_user_owner }}"
+    group: "{{ app_group_owner }}"
   become: yes

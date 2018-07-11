@@ -6,10 +6,19 @@
   loop: "{{ packages }}"
   become: yes
 
-- name:
-  template:
-    src: nginx.conf.j2
+- name: Add nginx main conf
+  copy:
+    src: nginx.conf
     dest: /etc/nginx/nginx.conf
+    backup: yes
+    mode: 0644
+    owner: root
+  become: yes
+
+- name: Add tomcat configuration
+  template:
+    src: nginx.tomcat.j2
+    dest: /etc/nginx/conf.d/nginxtomcat.conf
   become: yes
 
 - name: Start nginx

@@ -1,4 +1,12 @@
 ---
+- name: Download tomcat and untar
+  unarchive:
+    src: "{{ src }}"
+    dest: "{{ install_dir }}"
+    creates: "{{ config }}"
+    remote_src: yes
+  become: yes
+
 - name: Create group tomcat
   group:
     name: tomcat
@@ -11,21 +19,12 @@
     state: present
     group: tomcat
     shell: /bin/false
-    home: "{{ install_dir }}"
+    home: "{{ config }}"
   become: yes
 
-- name: Download tomcat and untar
-  unarchive:
-    src: "{{ src }}"
-    dest: "{{ install_dir }}"
-    creates: "{{ tomcat_folder }}"
-    remote_src: yes
-  become: yes
-
-
-- name: Set permission to tomcat_folder
+- name: Set permission to config
   file:
-    path: "{{ tomcat_folder }}"
+    path: "{{ config }}"
     state: directory
     owner: tomcat
     group: tomcat
@@ -34,7 +33,7 @@
 
 - name: Set tomcat group permissions to conf
   file:
-    path: "{{ tomcat_folder }}/conf"
+    path: "{{ config }}/conf"
     state: directory
     group: tomcat
     mode: 0640
@@ -42,7 +41,7 @@
   become: yes
 
 - file:
-    path: "{{ tomcat_folder }}/conf"
+    path: "{{ config }}/conf"
     state: directory
     group: tomcat
     mode: 0650
@@ -64,4 +63,4 @@
 
 - name: Set fact about tomcat folder
   set_fact:
-    TOMCAT: "{{ tomcat_folder }}"
+    TOMCAT: "{{ config }}"

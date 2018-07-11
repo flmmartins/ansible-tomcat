@@ -1,3 +1,4 @@
 ---
-install_dir: "/opt/tomcat/webapps"
 src: "https://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war"
+app_user_owner: tomcat
+app_group_owner: tomcat

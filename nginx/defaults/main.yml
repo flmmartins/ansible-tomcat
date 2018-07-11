@@ -3,4 +3,3 @@ packages:
   - epel-release
   - nginx
 app_port: 80
-tomcat_folder: ""
