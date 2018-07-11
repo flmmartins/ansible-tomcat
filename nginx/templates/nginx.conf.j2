@@ -36,11 +36,10 @@ http {
     include /etc/nginx/conf.d/*.conf;
 
     server {
-        listen       {{ port }} default_server;
-        listen       [::]:{{ port }} default_server;
-        server_name  {{ ansible_hostname }} www.{{ ansible_hostname }};;
+        listen       {{ app_port }} default_server;
+        listen       [::]:{{ app_port }} default_server;
+        server_name  {{ ansible_hostname }} www.{{ ansible_hostname }};
         root         {{ tomcat_folder }}/webapps/ROOT/
-	index index.jsp index.html index.htm;
 
         # Load configuration files for the default server block.
         include /etc/nginx/default.d/*.conf;

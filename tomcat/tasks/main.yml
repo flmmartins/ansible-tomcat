@@ -1,18 +1,9 @@
 ---
-- name: Download tomcat and untar
-  unarchive:
-    src: "{{ src }}"
-    dest: "{{ install_dir }}"
-    creates: "{{ tomcat_folder }}"
-    remote_src: yes
-  become: yes
-
 - name: Create group tomcat
   group:
     name: tomcat
     state: present
   become: yes
-
 
 - name: Create user tomcat
   user:
@@ -23,10 +14,20 @@
     home: "{{ install_dir }}"
   become: yes
 
-- name: Set tomcat group permission to config dir
+- name: Download tomcat and untar
+  unarchive:
+    src: "{{ src }}"
+    dest: "{{ install_dir }}"
+    creates: "{{ tomcat_folder }}"
+    remote_src: yes
+  become: yes
+
+
+- name: Set permission to tomcat_folder
   file:
     path: "{{ tomcat_folder }}"
     state: directory
+    owner: tomcat
     group: tomcat
     recurse: yes
   become: yes
@@ -47,19 +48,6 @@
     mode: 0650
   become: yes
 
-- name: Set tomcat user permissions
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: tomcat
-    recurse: yes
-  loop:
-    - "{{ tomcat_folder }}/webapps"
-    - "{{ tomcat_folder }}/work"
-    - "{{ tomcat_folder }}/temp"
-    - "{{ tomcat_folder }}/logs"
-  become: yes
-
 - name: Create tomcat service
   template:
     src: tomcat.service.j2
@@ -73,3 +61,7 @@
     state: started
     enabled: yes
   become: yes
+
+- name: Set fact about tomcat folder
+  set_fact:
+    TOMCAT: "{{ tomcat_folder }}"

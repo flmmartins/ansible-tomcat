@@ -6,14 +6,14 @@ After=network.target
 Type=forking
 
 Environment=JAVA_HOME={{ java }}
-Environment=CATALINA_PID={{ install_dir }}/temp/tomcat.pid
-Environment=CATALINA_HOME={{ install_dir }}
-Environment=CATALINA_BASE={{ install_dir }}
+Environment=CATALINA_PID={{ tomcat_folder }}/temp/tomcat.pid
+Environment=CATALINA_HOME={{ tomcat_folder }}
+Environment=CATALINA_BASE={{ tomcat_folder }}
 Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
-ExecStart={{ install_dir }}/bin/startup.sh
-ExecStop={{ install_dir }}/bin/shutdown.sh
+ExecStart={{ tomcat_folder }}/bin/startup.sh
+ExecStop={{ tomcat_folder }}/bin/shutdown.sh
 
 User=tomcat
 Group=tomcat

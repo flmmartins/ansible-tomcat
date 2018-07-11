@@ -1,16 +1,15 @@
 - hosts: webservers
-  vars:
-    tomcat_dir: /opt/tomcat
-    app_port: 8080
-
   roles:
-    #- role: java
-    #- role: nginx
+  - role: java
   - role: tomcat
     vars:
-      install_dir: "{{ tomcat_dir }}"
+      install_dir: "/opt/tomcat"
       java: "{{ hostvars[inventory_hostname]['JAVA_HOME'] }}"
+  - role: nginx
+    vars:
+      app_port: 8080
+      tomcat_folder: "{{ hostvars[inventory_hostname]['TOMCAT'] }}"
   - role: app
     vars:
-      install_dir: "{{ tomcat_dir }}/webapps"
+      install_dir: "{{ hostvars[inventory_hostname]['TOMCAT'] }}/webapps"
 
