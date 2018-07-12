@@ -11,5 +11,4 @@
     - role: nginx
       vars:
         app_port: 8080
-        app_path: "{{ hostvars[inventory_hostname]['TOMCAT'] }}/webapps"
 
