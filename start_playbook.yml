@@ -7,7 +7,7 @@
         JAVA_HOME: "{{ hostvars[inventory_hostname]['JAVA_HOME'] }}"
     - role: app
       vars:
-        install_dir: "{{ hostvars[inventory_hostname]['TOMCAT'] }}"
+        install_dir: "{{ hostvars[inventory_hostname]['TOMCAT'] }}/webapps"
     - role: nginx
       vars:
         app_port: 8080

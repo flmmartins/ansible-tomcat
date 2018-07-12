@@ -1,12 +1,4 @@
 ---
-- name: Download tomcat and untar
-  unarchive:
-    src: "{{ src }}"
-    dest: "{{ install_dir }}"
-    creates: "{{ config }}"
-    remote_src: yes
-  become: yes
-
 - name: Create group tomcat
   group:
     name: tomcat
@@ -19,7 +11,15 @@
     state: present
     group: tomcat
     shell: /bin/false
-    home: "{{ config }}"
+    home: "{{ install_dir }}"
+  become: yes
+
+- name: Download tomcat and untar
+  unarchive:
+    src: "{{ src }}"
+    dest: "{{ install_dir }}"
+    creates: "{{ config }}"
+    remote_src: yes
   become: yes
 
 - name: Set permission to config

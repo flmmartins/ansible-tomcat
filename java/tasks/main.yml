@@ -24,9 +24,9 @@
   lineinfile:
     path: /etc/profile
     state: present
-    line: 'JAVA_HOME={{ java_path }}-{{ JAVA_FOLDER }}/jre'
+    line: 'JAVA_HOME={{ java_path }}{{ JAVA_FOLDER }}/jre'
   become: yes
 
 - name: Set fact
   set_fact:
-    JAVA_HOME: '{{ java_path}}-{{ JAVA_FOLDER }}/jre'
+    JAVA_HOME: '{{ java_path}}{{ JAVA_FOLDER }}/jre'
